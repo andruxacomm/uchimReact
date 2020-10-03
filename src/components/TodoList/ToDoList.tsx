@@ -34,13 +34,15 @@ export const ToDoList: FC<ToDoListProps> = memo((props) => {
 
     return (
         <Grid className={css.list} container spacing={2}>
-            <Grid spacing={2}>
+            <Grid spacing={2} item>
                 <TextField id="outlined-basic"
                            label="Name of list"
                            variant="outlined"
                            value={title}
                            onChange={e => setTitle(e.currentTarget.value)}/>
+            </Grid>
 
+            <Grid spacing={2} item>
                 <Button onClick={() => addToDo()} variant={"outlined"} color={'primary'} size={"small"}>Add task</Button>
             </Grid>
 
