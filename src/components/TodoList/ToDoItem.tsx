@@ -1,6 +1,7 @@
 import React, {FC, memo, useEffect, useState} from "react";
 import {ToDoProps} from "./todoTypes";
 import {ToDoList, generateId} from "./ToDoList";
+import {Button} from "@material-ui/core";
 
 export const ToDoItem: FC<ToDoProps> = memo((props) => {
     const [title, setTitle] = useState(props.title);
@@ -9,7 +10,7 @@ export const ToDoItem: FC<ToDoProps> = memo((props) => {
     const [isTitleEdit, setIsTitleEdit] = useState(true);
 
     useEffect((): void => {
-        props.onUpdate({...props, list, title, completed});
+        props.onUpdate({list, title, completed});
     }, [completed, title, list]);
 
     const makeNestedList = () => {
@@ -45,9 +46,9 @@ export const ToDoItem: FC<ToDoProps> = memo((props) => {
 
             {list.length >= 1 && <ToDoList list={list} onListUpdate={e => setList(e)}/>}
 
-            {list.length === 0 && <button onClick={() => makeNestedList()}>Make nestedList</button>}
+            {list.length === 0 && <Button onClick={() => makeNestedList()}>Make nestedList</Button>}
 
-            <button onClick={() => props.onRemove()}>Remove task</button>
+            <Button onClick={() => props.onRemove()}>Remove task</Button>
         </li>
     )
 });

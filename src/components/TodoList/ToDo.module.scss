@@ -1,0 +1,23 @@
+.list {
+     position: relative;
+
+     display: flex;
+     justify-content: flex-start;
+     flex-direction: column;
+
+     padding: 20px;
+     border: 1px solid #ccc;
+     list-style: none;
+ }
+
+.label {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin-right: 10px;
+}
+
+.ul {
+    display: flex;
+}

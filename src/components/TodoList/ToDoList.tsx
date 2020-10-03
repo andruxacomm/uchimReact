@@ -1,6 +1,8 @@
 import React, {FC, memo, useEffect, useState} from 'react';
-import {ToDo, ToDoListProps} from "./todoTypes";
+import {ToDo, ToDoListProps, ToDoData} from "./todoTypes";
 import {ToDoItem} from "./ToDoItem";
+import {Button, TextField, Grid} from "@material-ui/core";
+import css from './ToDo.module.scss';
 
 export const generateId = (array: Array<ToDo>): number => {
     return parseInt(`${array.length}${Date.now()}`);
@@ -26,28 +28,25 @@ export const ToDoList: FC<ToDoListProps> = memo((props) => {
         setList([...list, {title: '', completed: false, id: generateId(list), list: []}]);
     };
 
-    const onUpdate = (index: number, data: ToDo) => {
-        setList(list.map((toDo, ind) => ({
-            ...toDo,
-            completed: ind === index ? data.completed : toDo.completed,
-            title: ind === index ? data.title : toDo.title,
-            list: ind === index ? data.list : toDo.list,
-        })))
+    const onUpdate = (index: number, data: ToDoData) => {
+        setList(list.map((toDo, ind) => ind === index ? {...toDo, ...data} : toDo))
     };
 
     return (
-        <div className="todoList">
-            <label>Name of list
-                <input type="text"
-                       value={title}
-                       onChange={e => setTitle(e.currentTarget.value)}/>
-            </label>
+        <Grid className={css.list} container spacing={2}>
+            <Grid spacing={2}>
+                <TextField id="outlined-basic"
+                           label="Name of list"
+                           variant="outlined"
+                           value={title}
+                           onChange={e => setTitle(e.currentTarget.value)}/>
+
+                <Button onClick={() => addToDo()} variant={"outlined"} color={'primary'} size={"small"}>Add task</Button>
+            </Grid>
 
             {title &&
             <>
-                <button onClick={() => addToDo()}>Add task</button>
-
-                <ul>
+                <ul className={css.ul}>
                     {list.map((toDo, index) => (
                         <ToDoItem key={toDo.id}
                                   {...toDo}
@@ -60,7 +59,8 @@ export const ToDoList: FC<ToDoListProps> = memo((props) => {
                 </ul>
             </>
             }
-        </div>
+        </Grid>
     )
 });
+
 
