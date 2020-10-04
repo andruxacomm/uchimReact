@@ -1,14 +1,7 @@
 .list {
-     position: relative;
-
-     display: flex;
-     justify-content: flex-start;
-     flex-direction: column;
-
-     padding: 20px;
-     border: 1px solid #ccc;
-     list-style: none;
- }
+    padding: 20px;
+    list-style: none;
+}
 
 .label {
     display: flex;

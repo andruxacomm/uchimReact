@@ -11,12 +11,21 @@ export const generateId = (array: Array<ToDo>): number => {
 export const ToDoList: FC<ToDoListProps> = memo((props) => {
     const [list, setList] = useState<Array<ToDo>>(props.list || []);
     const [title, setTitle] = useState<string>('');
+    const [isListCreated, setIsListCreated] = useState<boolean>(false);
 
     useEffect(() => {
-        if (typeof props.onListUpdate === 'function') {
-            props.onListUpdate(list);
-        }
+        props.onListUpdate?.(list);
     }, [list]);
+
+    const createToDoList = (): void => {
+        if (title) {
+            setIsListCreated(true);
+        }
+    };
+
+    const startEditToDoList = (): void => {
+        setIsListCreated(false);
+    };
 
     const removeTodo = (index: number): void => {
         const newList = [...list];
@@ -29,25 +38,51 @@ export const ToDoList: FC<ToDoListProps> = memo((props) => {
     };
 
     const onUpdate = (index: number, data: ToDoData) => {
-        setList(list.map((toDo, ind) => ind === index ? {...toDo, ...data} : toDo))
+        const newList = [...list];
+        newList[index] = {...newList[index], ...data};
+        setList(newList);
     };
 
     return (
-        <Grid className={css.list} container spacing={2}>
-            <Grid spacing={2} item>
-                <TextField id="outlined-basic"
-                           label="Name of list"
-                           variant="outlined"
-                           value={title}
-                           onChange={e => setTitle(e.currentTarget.value)}/>
+        <div>
+            <Grid className={css.list} container spacing={1}>
+                {isListCreated ?
+                    <Grid container justify={'flex-start'} alignItems={'center'} direction={'row'}>
+                        <h1 style={{marginRight: '10px'}}>{title}</h1>
+
+                        <Button onClick={() => startEditToDoList()}
+                                variant="outlined"
+                                color={'primary'}
+                                size={"small"}>
+                            Edit title
+                        </Button>
+                    </Grid>
+                    :
+                    <Grid container spacing={2} item xs={6} alignItems={'center'} justify={'flex-start'} direction={'row'}>
+                        <TextField id="outlined-basic"
+                                   label="Name of list"
+                                   variant="outlined"
+                                   style={{maxWidth: '100%', marginRight: '10px'}}
+                                   value={title}
+                                   onChange={e => setTitle(e.currentTarget.value)}/>
+
+                        {title &&
+                        <Button variant={"outlined"}
+                                color={'primary'}
+                                size={"large"}
+                                style={{maxWidth: '100%', height: '100%'}}
+                                onClick={() => createToDoList()}>
+                            Confirm
+                        </Button>
+                        }
+                    </Grid>
+                }
             </Grid>
 
-            <Grid spacing={2} item>
-                <Button onClick={() => addToDo()} variant={"outlined"} color={'primary'} size={"small"}>Add task</Button>
-            </Grid>
-
-            {title &&
+            {isListCreated &&
             <>
+                <Button onClick={() => addToDo()} variant={"outlined"} color={'primary'} size={"small"}>Add task</Button>
+
                 <ul className={css.ul}>
                     {list.map((toDo, index) => (
                         <ToDoItem key={toDo.id}
@@ -61,7 +96,7 @@ export const ToDoList: FC<ToDoListProps> = memo((props) => {
                 </ul>
             </>
             }
-        </Grid>
+        </div>
     )
 });
 
