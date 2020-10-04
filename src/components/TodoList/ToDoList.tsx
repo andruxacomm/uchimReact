@@ -58,7 +58,7 @@ export const ToDoList: FC<ToDoListProps> = memo((props) => {
                         </Button>
                     </Grid>
                     :
-                    <Grid container spacing={2} item xs={6} alignItems={'center'} justify={'flex-start'} direction={'row'}>
+                    <Grid container item xs={6} alignItems={'center'} justify={'flex-start'} direction={'row'}>
                         <TextField id="outlined-basic"
                                    label="Name of list"
                                    variant="outlined"
