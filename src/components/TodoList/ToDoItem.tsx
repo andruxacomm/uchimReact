@@ -11,10 +11,12 @@ export const ToDoItem: FC<ToDoProps> = memo((props) => {
     const [list, setList] = useState(props.list);
     const [isTitleEdit, setIsTitleEdit] = useState(true);
     const [isControlsShow, setIsControlShow] = useState(false);
+    const {order, listName, onUpdate} = props;
 
     useEffect((): void => {
-        props.onUpdate({list, title, completed});
-    }, [completed, title, list]);
+        onUpdate({list, title, completed});
+        // eslint-disable-next-line
+    }, [completed, list, isTitleEdit]);
 
     const makeNestedList = (): void => {
         if (list.length === 0) {
@@ -22,7 +24,7 @@ export const ToDoItem: FC<ToDoProps> = memo((props) => {
         }
     };
 
-    const removeNestedList = (): void => {
+    const disableNestedList = (): void => {
         setList([]);
     };
 
@@ -34,7 +36,7 @@ export const ToDoItem: FC<ToDoProps> = memo((props) => {
                         classes={{root: `${isTitleEdit ? css.dNone : ''}`}}
                         disabled={list.length >= 1}
                         control={<Checkbox checked={completed} onChange={e => setCompleted(e.currentTarget.checked)} name="checkedA" color="primary"/>}
-                        label={`${props.order + 1} Task of "${props.listName}" list is: "${title}"`}
+                        label={`${order + 1} Task of "${listName}" list is: "${title}"`}
                     />
                 </div>
 
@@ -64,7 +66,7 @@ export const ToDoItem: FC<ToDoProps> = memo((props) => {
                 <ToDoList
                     list={list}
                     onListUpdate={e => setList(e)}
-                    onRemoveNestedList={() => removeNestedList()}
+                    onRemoveNestedList={() => disableNestedList()}
                     className={`${list.length === 0 ? css.dNone : ''}`}
                 />
 

@@ -1,9 +1,10 @@
-import React, {FC, memo, useEffect, useState} from 'react';
+import React, {FC, memo, useEffect, useMemo, useState} from 'react';
 import {ToDo, ToDoListProps, ToDoData} from "./todoTypes";
 import {ToDoItem} from "./ToDoItem";
 import {Button, TextField} from "@material-ui/core";
 import css from './ToDo.module.scss';
 import {generateId} from "../../helpers/listHelpers";
+import {useToDoPercentage} from "./useToDoPercentage";
 
 export const ToDoList: FC<ToDoListProps> = memo((props) => {
     const [list, setList] = useState<Array<ToDo>>(props.list);
@@ -12,6 +13,7 @@ export const ToDoList: FC<ToDoListProps> = memo((props) => {
 
     useEffect(() => {
         props.onListUpdate?.(list);
+        // eslint-disable-next-line
     }, [list]);
 
     const createToDoList = (): void => {
@@ -40,9 +42,13 @@ export const ToDoList: FC<ToDoListProps> = memo((props) => {
         setList(newList);
     };
 
+    const getCompletedPercentage = useToDoPercentage(list);
+
     return (
         <div className={`${css.list} ${props.className}`}>
             <div style={{position: 'relative'}}>
+                {`${getCompletedPercentage}%`}
+
                 <div className={`${!isListCreated ? css.dNone : ''} ${css.container}`}>
                     <h1 className={css.mr10}>
                         {title}
