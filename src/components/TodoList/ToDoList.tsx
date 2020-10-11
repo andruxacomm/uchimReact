@@ -3,10 +3,7 @@ import {ToDo, ToDoListProps, ToDoData} from "./todoTypes";
 import {ToDoItem} from "./ToDoItem";
 import {Button, TextField} from "@material-ui/core";
 import css from './ToDo.module.scss';
-
-export const generateId = (array: Array<ToDo>): number => {
-    return parseInt(`${array.length}${Date.now()}`);
-};
+import {generateId} from "../../helpers/listHelpers";
 
 export const ToDoList: FC<ToDoListProps> = memo((props) => {
     const [list, setList] = useState<Array<ToDo>>(props.list);

@@ -1,8 +1,9 @@
 import React, {FC, memo, useEffect, useState} from "react";
 import {ToDo, ToDoProps} from "./todoTypes";
-import {ToDoList, generateId} from "./ToDoList";
+import {ToDoList} from "./ToDoList";
 import {Button, TextField, FormControlLabel, Checkbox} from "@material-ui/core";
 import css from './ToDo.module.scss';
+import {generateId} from "../../helpers/listHelpers";
 
 export const ToDoItem: FC<ToDoProps> = memo((props) => {
     const [title, setTitle] = useState(props.title);
@@ -21,20 +22,12 @@ export const ToDoItem: FC<ToDoProps> = memo((props) => {
         }
     };
 
-    const changeIsControlShow = (): void => {
-        setIsControlShow(!isControlsShow);
-    };
-
     const removeNestedList = (): void => {
         setList([]);
     };
 
-    const updateList = (e: Array<ToDo>): void => {
-        setList(e)
-    };
-
     return (
-        <li style={{listStyle: "none"}}>
+        <li className={css.toDoItem}>
             <div className={css.textContainer}>
                 <div className={css.container}>
                     <FormControlLabel
@@ -61,15 +54,16 @@ export const ToDoItem: FC<ToDoProps> = memo((props) => {
             </div>
 
             <h3 className={`${isTitleEdit ? css.dNone : ''} ${css.pointer}`}
-                style={{margin: '10px 0 10px 0', padding: '0'}}
-                onClick={() => changeIsControlShow()}
+                style={{margin: '10px 0 10px 0', padding: '0', textAlign: 'left'}}
+                onClick={() => setIsControlShow(!isControlsShow)}
             >
                 Controls
             </h3>
+
             <div className={`${!isControlsShow ? css.dNone : ''}`}>
                 <ToDoList
                     list={list}
-                    onListUpdate={e => updateList(e)}
+                    onListUpdate={e => setList(e)}
                     onRemoveNestedList={() => removeNestedList()}
                     className={`${list.length === 0 ? css.dNone : ''}`}
                 />
