@@ -1,6 +1,11 @@
 .list {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
     padding: 20px;
-    list-style: none;
+    margin: 0;
+    border: 1px solid #ccc;
 }
 
 .label {
@@ -11,6 +16,43 @@
     margin-right: 10px;
 }
 
-.ul {
+.dNone {
+    display: none !important;
+}
+
+.mr10 {
+    margin-right: 10px !important;
+}
+
+.container {
     display: flex;
+    align-items: center;
+}
+
+.todo {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 20px;
+    margin: 0;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.textContainer {
+    position: relative;
+    padding-right: 150px;
+}
+
+.editTitle {
+    position: absolute;
+    top: 0;
+    right: 0;
+    max-width: 150px;
+
+    display: flex;
+    justify-content: flex-end;
 }

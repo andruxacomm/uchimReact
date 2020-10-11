@@ -7,15 +7,16 @@ export type ToDo = {
 
 export type ToDoProps = ToDo & {
     onRemove: () => void;
-    onUpdate: (data:ToDoData) => void;
+    onUpdate: (data: ToDoData) => void;
     order: number,
     listName: string,
 }
 
 export type ToDoListProps = {
-    list?: Array<ToDo>;
-    onListUpdate?: (list: Array<ToDo>) => void;
-    //parentName?: string;
+    list: Array<ToDo>;
+    onListUpdate: (list: Array<ToDo>) => void;
+    className?: string;
+    onRemoveNestedList?: () => void;
 }
 
 export type ToDoData = {

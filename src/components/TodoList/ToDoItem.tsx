@@ -1,54 +1,98 @@
 import React, {FC, memo, useEffect, useState} from "react";
-import {ToDoProps} from "./todoTypes";
+import {ToDo, ToDoProps} from "./todoTypes";
 import {ToDoList, generateId} from "./ToDoList";
-import {Button} from "@material-ui/core";
+import {Button, TextField, FormControlLabel, Checkbox} from "@material-ui/core";
+import css from './ToDo.module.scss';
 
 export const ToDoItem: FC<ToDoProps> = memo((props) => {
     const [title, setTitle] = useState(props.title);
     const [completed, setCompleted] = useState(props.completed);
     const [list, setList] = useState(props.list);
     const [isTitleEdit, setIsTitleEdit] = useState(true);
+    const [isControlsShow, setIsControlShow] = useState(false);
 
     useEffect((): void => {
         props.onUpdate({list, title, completed});
     }, [completed, title, list]);
 
-    const makeNestedList = () => {
+    const makeNestedList = (): void => {
         if (list.length === 0) {
             setList([...list, {title: title, completed: false, id: generateId(list), list: []}]);
         }
     };
 
+    const changeIsControlShow = (): void => {
+        setIsControlShow(!isControlsShow);
+    };
+
+    const removeNestedList = (): void => {
+        setList([]);
+    };
+
+    const updateList = (e: Array<ToDo>): void => {
+        setList(e)
+    };
+
     return (
         <li style={{listStyle: "none"}}>
-            <div>
-                {!isTitleEdit && <h3>{props.order + 1} Task of {props.listName} list is: {title}</h3>}
-
-                {isTitleEdit && <input type="text" value={title} onChange={e => setTitle(e.currentTarget.value)}/>}
-
-                <label>
-                    <input type="checkbox"
-                           checked={isTitleEdit}
-                           onChange={e => setIsTitleEdit(e.currentTarget.checked)}
+            <div className={css.textContainer}>
+                <div className={css.container}>
+                    <FormControlLabel
+                        classes={{root: `${isTitleEdit ? css.dNone : ''}`}}
+                        disabled={list.length >= 1}
+                        control={<Checkbox checked={completed} onChange={e => setCompleted(e.currentTarget.checked)} name="checkedA" color="primary"/>}
+                        label={`${props.order + 1} Task of "${props.listName}" list is: "${title}"`}
                     />
-                    Edit title
-                </label>
+                </div>
+
+                <TextField id="outlined-basic"
+                           label="Name of list"
+                           variant="outlined"
+                           value={title}
+                           classes={{root: `${!isTitleEdit ? css.dNone : ''}`}}
+                           onChange={e => setTitle(e.currentTarget.value)}/>
+
+                <FormControlLabel
+                    classes={{root: css.editTitle}}
+                    disabled={list.length >= 1}
+                    control={<Checkbox checked={isTitleEdit} onChange={e => setIsTitleEdit(e.currentTarget.checked)} name="checkedB" color="secondary"/>}
+                    label="Edit title"
+                />
             </div>
 
-            <label>
-                completed
-                <input type="checkbox"
-                       disabled={list.length >= 1}
-                       checked={completed}
-                       onChange={e => setCompleted(e.currentTarget.checked)}
+            <h3 className={`${isTitleEdit ? css.dNone : ''} ${css.pointer}`}
+                style={{margin: '10px 0 10px 0', padding: '0'}}
+                onClick={() => changeIsControlShow()}
+            >
+                Controls
+            </h3>
+            <div className={`${!isControlsShow ? css.dNone : ''}`}>
+                <ToDoList
+                    list={list}
+                    onListUpdate={e => updateList(e)}
+                    onRemoveNestedList={() => removeNestedList()}
+                    className={`${list.length === 0 ? css.dNone : ''}`}
                 />
-            </label>
 
-            {list.length >= 1 && <ToDoList list={list} onListUpdate={e => setList(e)}/>}
+                <Button
+                    variant="outlined"
+                    color={'primary'}
+                    size={"small"}
+                    classes={{root: `${list.length >= 1 ? css.dNone : ''} ${css.mr10}`}}
+                    onClick={() => makeNestedList()}>
+                    Make nested list
+                </Button>
 
-            {list.length === 0 && <Button onClick={() => makeNestedList()}>Make nestedList</Button>}
-
-            <Button onClick={() => props.onRemove()}>Remove task</Button>
+                <Button
+                    variant="outlined"
+                    color={'primary'}
+                    classes={{root: css.mr10}}
+                    size={"small"}
+                    onClick={() => props.onRemove()}
+                >
+                    Remove task
+                </Button>
+            </div>
         </li>
     )
 });
