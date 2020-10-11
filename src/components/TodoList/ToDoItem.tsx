@@ -1,5 +1,5 @@
 import React, {FC, memo, useEffect, useState} from "react";
-import {ToDo, ToDoProps} from "./todoTypes";
+import {ToDoProps} from "./todoTypes";
 import {ToDoList} from "./ToDoList";
 import {Button, TextField, FormControlLabel, Checkbox} from "@material-ui/core";
 import css from './ToDo.module.scss';
